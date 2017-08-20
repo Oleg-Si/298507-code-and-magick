@@ -1,6 +1,16 @@
 'use strict';
 
 window.renderStatistics = function (ctx, names, times) {
+  // Переменные
+  var columnWidth = 40;
+  var timeMax = 0;
+  var totalHeight = 0;
+  var columnSpace = 50;
+  var columnPositionStartX = 150;
+  var columnPositionStartY = 250;
+  var namePositionStartY = 270;
+  var timePositionStartY = 85;
+
   // Рисуем тень облака
   ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
   ctx.shadowOffsetY = 10;
@@ -13,31 +23,43 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Ура вы победили!', 110, 25);
   ctx.fillText('Список результатов:', 110, 45);
 
-  var columnWidth = 40;
-  var columnHeight = 150;
-  var columnSpace = 50;
-  var columnPositionStartX = 150;
-  var columnPositionStartY = 100;
-  var namePositionStartY = 270;
-  var timePositionStartY = 85;
-
   // Отключаем тень
   ctx.shadowColor = 'rgba(0, 0, 0, 0)';
 
-  // Рисуем столбики
-  for (var i = 1; i <= names.length; i++) {
+  // Находим максимальное время
+  for (var a = 0; a < times.length; a++) {
+    var time = times[a];
+    if (time > timeMax) {
+      timeMax = time;
+    }
+  }
+
+  // Находим высоту столбика, в зависимости от времени
+  var columnHeight = function (timeNow) {
+    if (timeNow === timeMax) {
+      totalHeight = -150;
+    }
+    if (timeNow < timeMax) {
+      totalHeight = timeNow * -150 / timeMax;
+    }
+    return totalHeight;
+  };
+
+  // Рисуем столбики, имена и время
+  for (var i = 0; i < names.length; i++) {
     // Красный столбик, мой
-    if (names[i - 1] === 'Вы') {
+    if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
       ctx.fillStyle = 'rgba(0, 0, 255, ' + Math.random() + ')';
     }
-    ctx.fillRect(columnPositionStartX, columnPositionStartY, columnWidth, columnHeight);
+    var timeNow = times[i];
+    ctx.fillRect(columnPositionStartX, columnPositionStartY, columnWidth, columnHeight(timeNow));
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
     // Рисуем имена
-    ctx.fillText(names[i - 1], columnPositionStartX, namePositionStartY);
+    ctx.fillText(names[i], columnPositionStartX, namePositionStartY);
     // Рисуем время
-    ctx.fillText(Math.floor(times[i - 1]), columnPositionStartX, timePositionStartY);
+    ctx.fillText(Math.floor(times[i]), columnPositionStartX, timePositionStartY);
     // Правильно ли я округлил вреия???
     // Задаем точку X другого столбика
     columnPositionStartX = columnPositionStartX + columnSpace + columnWidth;
