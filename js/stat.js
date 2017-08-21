@@ -12,6 +12,7 @@ var timePositionStartY = 85;
 
 // Находим максимальное время
 var getTimeMax = function (times) {
+  timeMax = 0;
   for (var a = 0; a < times.length; a++) {
     var time = times[a];
     if (time > timeMax) {
@@ -53,8 +54,9 @@ var drawColumn = function (names, ctx, times) {
     // Рисуем время
     ctx.fillText(Math.floor(times[i]), columnPositionStartX, timePositionStartY);
     // Задаем точку X другого столбика
-    columnPositionStartX = columnPositionStartX + columnSpace + columnWidth;
+    columnPositionStartX += columnSpace + columnWidth;
   }
+  columnPositionStartX = 150;
 };
 
 window.renderStatistics = function (ctx, names, times) {
@@ -72,7 +74,7 @@ window.renderStatistics = function (ctx, names, times) {
 
   // Отключаем тень
   ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-  debugger;
+
   // Находим максимальное время
   getTimeMax(times);
 
