@@ -1,18 +1,8 @@
 'use strict';
 
-// Переменные
-var columnWidth = 40;
-var timeMax = 0;
-var totalHeight = 0;
-var columnSpace = 50;
-var columnPositionStartX = 150;
-var columnPositionStartY = 250;
-var namePositionStartY = 270;
-var timePositionStartY = 85;
-
 // Находим максимальное время
 var getTimeMax = function (times) {
-  timeMax = 0;
+  var timeMax = 0;
   for (var a = 0; a < times.length; a++) {
     var time = times[a];
     if (time > timeMax) {
@@ -23,18 +13,19 @@ var getTimeMax = function (times) {
 };
 
 // Находим высоту столбика, в зависимости от времени
-var getColumnHeight = function (timeNow) {
-  if (timeNow === timeMax) {
+var getColumnHeight = function (timeNow, maxTime) {
+  var totalHeight = 0;
+  if (timeNow === maxTime) {
     totalHeight = -150;
   }
-  if (timeNow < timeMax) {
-    totalHeight = timeNow * -150 / timeMax;
+  if (timeNow < maxTime) {
+    totalHeight = timeNow * -150 / maxTime;
   }
   return totalHeight;
 };
 
 // Рисуем столбики, имена и время
-var drawColumn = function (names, ctx, times) {
+var drawColumn = function (names, ctx, times, maxTime, columnPositionStartX, columnPositionStartY, namePositionStartY, timePositionStartY, columnWidth, columnSpace) {
   for (var i = 0; i < names.length; i++) {
     // Красный столбик, мой
     if (names[i] === 'Вы') {
@@ -45,9 +36,9 @@ var drawColumn = function (names, ctx, times) {
     var timeNow = times[i];
 
     // Находим высоту столбика, в зависимости от времени
-    getColumnHeight(timeNow);
+    var columnHeight = getColumnHeight(timeNow, maxTime);
 
-    ctx.fillRect(columnPositionStartX, columnPositionStartY, columnWidth, getColumnHeight(timeNow));
+    ctx.fillRect(columnPositionStartX, columnPositionStartY, columnWidth, columnHeight);
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
     // Рисуем имена
     ctx.fillText(names[i], columnPositionStartX, namePositionStartY);
@@ -60,6 +51,14 @@ var drawColumn = function (names, ctx, times) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
+  // Переменные
+  var columnWidth = 40;
+  var columnSpace = 50;
+  var columnPositionStartX = 150;
+  var columnPositionStartY = 250;
+  var namePositionStartY = 270;
+  var timePositionStartY = 85;
+
   // Рисуем тень облака
   ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
   ctx.shadowOffsetY = 10;
@@ -76,8 +75,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.shadowColor = 'rgba(0, 0, 0, 0)';
 
   // Находим максимальное время
-  getTimeMax(times);
+  var maxTime = getTimeMax(times);
 
   // Рисуем столбики, имена и время
-  drawColumn(names, ctx, times);
+  drawColumn(names, ctx, times, maxTime, columnPositionStartX, columnPositionStartY, namePositionStartY, timePositionStartY, columnWidth, columnSpace);
 };
