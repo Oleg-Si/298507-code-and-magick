@@ -52,7 +52,7 @@ var getArray = function () {
       coatColor: WIZARD_COAT_COLOR[getRandomInt(0, 6)],
       eyesColor: WIZARD_EYES_COLOR[getRandomInt(0, 5)]
     };
-    array[i] = element;
+    array.push(element);
   }
   return array;
 };
