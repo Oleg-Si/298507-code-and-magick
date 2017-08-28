@@ -62,10 +62,10 @@ var similarWizard = document.querySelector('#similar-wizard-template').content.q
 
 var getFragment = function () {
   var fragment = document.createDocumentFragment();
-  for (var j = 1; j < 5; j++) {
-    similarWizard.querySelector('.setup-similar-label').textContent = magick[j - 1].name;
-    similarWizard.querySelector('.wizard-coat').style.fill = magick[j - 1].coatColor;
-    similarWizard.querySelector('.wizard-eyes').style.fill = magick[j - 1].eyesColor;
+  for (var j = 0; j < 4; j++) {
+    similarWizard.querySelector('.setup-similar-label').textContent = magick[j].name;
+    similarWizard.querySelector('.wizard-coat').style.fill = magick[j].coatColor;
+    similarWizard.querySelector('.wizard-eyes').style.fill = magick[j].eyesColor;
     var element = similarWizard.cloneNode(true);
     fragment.appendChild(element);
   }
